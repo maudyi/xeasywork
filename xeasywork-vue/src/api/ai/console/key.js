@@ -51,3 +51,11 @@ export function delApiKey(id) {
         method: 'delete'
     })
 }
+
+// 获取AI模型环境设置
+export function getAgentEnv(modelId) {
+    return request({
+        url: '/ai/console/agent/env/' + modelId,
+        method: 'get'
+    })
+}

@@ -187,7 +187,7 @@ import { getToken } from '@/utils/auth'
 import userAvatar from '@/assets/images/profile.jpg'
 import qwenAi from '@/assets/images/ai/qwen-ai.png'
 import deepseekAI from '@/assets/images/ai/deepseek-ai.png'
-import {allListApiKey, getApiKey, listApiKey} from "@/api/ai/console/key.js";
+import {allListApiKey, getApiKey, listApiKey, getAgentEnv} from "@/api/ai/console/key.js";
 
 let model;
 // 2. 创建获取头像的方法
@@ -309,8 +309,12 @@ const sendMessage = async () => {
         messages.value[messages.value.length - 1].content,
         getToken() // 注入认证令牌
     );
+    // maudyi 环境变量设置
+    let envSetting = await getAgentEnv(model.modelId);
+    console.log('envSetting', envSetting);
+    
     // 初始化助手消息
-    let assistantMsg = {sessionId: chatHistory.value[currentChatIndex.value].id, role: 'assistant', content: '', createTime: Date.now()};
+    let assistantMsg = {sessionId: chatHistory.value[currentChatIndex.value].id, role: 'assistant', content: envSetting, createTime: Date.now()};
     messages.value.push(assistantMsg);
     // 流式数据处理器
     eventSource.onmessage = async (event) => {

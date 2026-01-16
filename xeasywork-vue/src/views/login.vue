@@ -76,8 +76,8 @@ const router = useRouter();
 const { proxy } = getCurrentInstance();
 
 const loginForm = ref({
-  username: "XEasyWork",
-  password: "XEasyWork",
+  username: "admin",
+  password: "admin123",
   rememberMe: false,
   code: "",
   uuid: ""
