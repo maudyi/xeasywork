@@ -6,13 +6,14 @@ import com.agentsflex.llm.qwen.QwenLlm;
 import com.agentsflex.llm.qwen.QwenLlmConfig;
 import com.xeasywork.tinyflow.common.util.StringUtils;
 import com.xeasywork.tinyflow.domain.ai.ApiKey;
+import com.xeasywork.tinyflow.domain.ai.ChatRequest;
 import com.xeasywork.tinyflow.domain.ai.ChatSessionDetail;
 import com.xeasywork.tinyflow.service.ai.IApiKeyService;
 import com.xeasywork.tinyflow.service.ai.IChatSessionDetailService;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
@@ -38,8 +39,12 @@ public class ChatController {
     /**
      * chat
      */
-    @GetMapping(value = "/streamChat", produces = {MediaType.TEXT_EVENT_STREAM_VALUE})
-    public Flux<String> streamChat(@RequestParam("text") String text, @RequestParam("modelId") Long modelId, @RequestParam("sessionId") Long sessionId) {
+    @PostMapping(value = "/streamChat", produces = {MediaType.TEXT_EVENT_STREAM_VALUE})
+    public Flux<String> streamChat(@RequestBody ChatRequest chatRequest) {
+        Long sessionId = chatRequest.getSessionId();
+        Long modelId = chatRequest.getModelId();
+        String text = chatRequest.getText();
+
         System.out.println(modelId);
         ApiKey apiKey = apiKeyService.selectApiKeyById(modelId);
         QwenLlmConfig config = new QwenLlmConfig();
