@@ -310,8 +310,14 @@ const sendMessage = async () => {
         getToken() // 注入认证令牌
     );
     // maudyi 环境变量设置
-    let envSetting = await getAgentEnv(model.modelId);
-    console.log('envSetting', envSetting);
+    let envSetting = '';
+    try {
+      let envResult = await getAgentEnv(model.modelId);
+      envSetting = envResult || '';
+      console.log('envSetting', envSetting);
+    } catch (error) {
+      console.error('获取环境设置失败:', error);
+    }
     
     // 初始化助手消息
     let assistantMsg = {sessionId: chatHistory.value[currentChatIndex.value].id, role: 'assistant', content: envSetting, createTime: Date.now()};
